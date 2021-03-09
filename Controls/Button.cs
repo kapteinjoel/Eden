@@ -79,16 +79,15 @@ namespace Eden
 
             public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
             {
-                var colour = Color.White;
 
                 if (_isHovering)
                 {
-                    colour = Color.Yellow;
-                    spriteBatch.Draw(_texture, new Rectangle((int)Position.X-4, (int)Position.Y-4, _texture.Width + 8, _texture.Height + 8), new Rectangle(0, 0, _texture.Width, _texture.Height), Color.Yellow);
+                    
+                    spriteBatch.Draw(_texture, new Rectangle((int)Position.X-2, (int)Position.Y-2, _texture.Width + 4, _texture.Height + 4), new Rectangle(0, 0, _texture.Width, _texture.Height), Color.MonoGameOrange);
                 }
                 else
                 {
-                    spriteBatch.Draw(_texture, new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height), Rectangle, colour);
+                    spriteBatch.Draw(_texture, new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height), new Rectangle(0, 0, _texture.Width, _texture.Height), Color.White);
                 }
                 
 

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Media;
 using Eden.Controls;
+using Comora;
 
 namespace Eden
 {
@@ -13,12 +14,9 @@ namespace Eden
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        private Texture2D mcursor;
         private Cursor _cursor;
         private State _currentState;
         private State _nextState;
-        private MouseState currentMouseState;
-        private Vector2 mpos;
         public void ChangeState(State state)
         {
             _nextState = state;
@@ -29,16 +27,18 @@ namespace Eden
             Content.RootDirectory = "Content";
             graphics.ToggleFullScreen();
             IsMouseVisible = false;
-
+            
 
         }
 
         protected override void Initialize()
         {
-            base.Initialize();
+            
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.ApplyChanges();
+            base.Initialize();
+            
             
         }
 
@@ -56,8 +56,6 @@ namespace Eden
                 _currentState = _nextState;
                 _nextState = null;
             }
-            
-
             _currentState.Update(gameTime);
             _cursor.Update(gameTime);
             _currentState.PostUpdate(gameTime);
@@ -66,7 +64,7 @@ namespace Eden
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.Black);
             _currentState.Draw(gameTime, spriteBatch);
             _cursor.Draw(gameTime, spriteBatch);
             base.Draw(gameTime);

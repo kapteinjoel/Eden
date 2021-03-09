@@ -12,29 +12,22 @@ namespace Eden.States
 {
     public class PlayerLoader : State
     {
+        private Vector2 pos { get; set; }
+        
         private List<Component> _components;
         public PlayerLoader(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
         {
             var buttonTexture = _content.Load<Texture2D>("Controls/Button");
             var buttonFont = _content.Load<SpriteFont>("Fonts/Font");
-            var MenuBack = _content.Load<Texture2D>("Controls/MenuBack");
             var buttonSound = _content.Load<SoundEffect>("Sounds/ButtonHover2");
             var buttonClick = _content.Load<SoundEffect>("Sounds/YesClick");
-            var newGameButton = new Button(buttonTexture, buttonFont, buttonSound, buttonClick)
+            var newPlayerButton = new Button(buttonTexture, buttonFont, buttonSound, buttonClick)
             {
                 Position = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 3 / 36, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height * 4 / 5),
-                Text = "Test",
+                Text = "New",
             };
 
-            newGameButton.Click += NewGameButton_Click;
-
-            var loadGameButton = new Button(buttonTexture, buttonFont, buttonSound, buttonClick)
-            {
-                Position = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 15 / 36, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height * 4 / 5),
-                Text = "Load Game",
-            };
-
-            loadGameButton.Click += LoadGameButton_Click;
+            newPlayerButton.Click += NewPlayerButton_Click;
 
             buttonClick = _content.Load<SoundEffect>("Sounds/NopeClick");
 
@@ -45,11 +38,10 @@ namespace Eden.States
             };
 
             backGameButton.Click += BackGameButton_Click;
-
+            
             _components = new List<Component>()
             {
-                newGameButton,
-                loadGameButton,
+                newPlayerButton,
                 backGameButton,
             };
         }
@@ -59,14 +51,9 @@ namespace Eden.States
             _game.ChangeState(new MenuState(_game, _graphicsDevice, _content));
         }
 
-        private void LoadGameButton_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine("Load Game");
-        }
-
-        private void NewGameButton_Click(object sender, EventArgs e)
-        {
-            //_game.ChangeState(new CharacterMenu(_game, _graphicsDevice, _content));
+        private void NewPlayerButton_Click(object sender, EventArgs e)
+        { 
+            _game.ChangeState(new GameState(_game, _graphicsDevice, _content));
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -75,7 +62,6 @@ namespace Eden.States
 
             foreach (var component in _components)
                 component.Draw(gameTime, spriteBatch);
-
 
             spriteBatch.End();
         }

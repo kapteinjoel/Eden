@@ -15,7 +15,7 @@ namespace Eden.States
         private List<Component> _components;
         public MenuState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
         {
-            var buttonTexture = _content.Load<Texture2D>("Controls/Button");
+            var buttonTexture = _content.Load<Texture2D>("Controls/SINGLEPLAYER");
 
             var buttonFont = _content.Load<SpriteFont>("Fonts/Font");
 
@@ -23,36 +23,40 @@ namespace Eden.States
 
             var buttonClick = _content.Load<SoundEffect>("Sounds/YesClick");
 
-            var newGameButton = new Button(buttonTexture, buttonFont, buttonSound, buttonClick)
+            var SinglePlayerButton = new Button(buttonTexture, buttonFont, buttonSound, buttonClick)
             {
-                Position = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width*3/36, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height*4/5),
-                Text = "New Game",
+                Position = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width*46/100, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height*7/16),
+                Text = "",
             };
 
-            newGameButton.Click += NewGameButton_Click;
+            SinglePlayerButton.Click += SingleGameButton_Click;
 
-            var loadGameButton = new Button(buttonTexture, buttonFont, buttonSound, buttonClick)
+            buttonTexture = _content.Load<Texture2D>("Controls/MULTIPLAYER");
+
+            var MultiGameButton = new Button(buttonTexture, buttonFont, buttonSound, buttonClick)
             {
-                Position = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width*15/36,GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height*4/5),
-                Text = "Load Game",
+                Position = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width*93/200,GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height*9/16),
+                Text = "",
             };
 
-            loadGameButton.Click += LoadGameButton_Click;
+            MultiGameButton.Click += MultiGameButton_Click;
 
             buttonClick = _content.Load<SoundEffect>("Sounds/NopeClick");
 
+            buttonTexture = _content.Load<Texture2D>("Controls/QUITGAME");
+
             var quitGameButton = new Button(buttonTexture, buttonFont, buttonSound, buttonClick)
             {
-                Position = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width*7/36, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height*4/5),
-                Text = "Quit",
+                Position = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width*94/200, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height*11/16),
+                Text = "",
             };
 
             quitGameButton.Click += QuitGameButton_Click;
 
             _components = new List<Component>()
             {
-                newGameButton,
-                loadGameButton,
+                SinglePlayerButton,
+                MultiGameButton,
                 quitGameButton,
             };
         }
@@ -63,12 +67,12 @@ namespace Eden.States
             _game.Exit();
         }
 
-        private void LoadGameButton_Click(object sender, EventArgs e)
+        private void MultiGameButton_Click(object sender, EventArgs e)
         {
             Console.WriteLine("Load Game");
         }
 
-        private void NewGameButton_Click(object sender, EventArgs e)
+        private void SingleGameButton_Click(object sender, EventArgs e)
         {
             _game.ChangeState(new PlayerLoader(_game, _graphicsDevice, _content));
         }
