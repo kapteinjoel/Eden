@@ -27,8 +27,6 @@ namespace Eden
             Content.RootDirectory = "Content";
             graphics.ToggleFullScreen();
             IsMouseVisible = false;
-            
-
         }
 
         protected override void Initialize()
@@ -64,7 +62,7 @@ namespace Eden
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.DeepSkyBlue);
             _currentState.Draw(gameTime, spriteBatch);
             _cursor.Draw(gameTime, spriteBatch);
             base.Draw(gameTime);

@@ -13,8 +13,10 @@ namespace Eden.States
     public class MenuState : State
     {
         private List<Component> _components;
+        Texture2D menuback;
         public MenuState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
         {
+            menuback = _content.Load<Texture2D>("Controls/EdenTitle");
             var buttonTexture = _content.Load<Texture2D>("Controls/SINGLEPLAYER");
 
             var buttonFont = _content.Load<SpriteFont>("Fonts/Font");
@@ -81,8 +83,13 @@ namespace Eden.States
         {
             spriteBatch.Begin();
 
-            foreach (var component in _components)
-                component.Draw(gameTime, spriteBatch);
+            spriteBatch.Draw(menuback, Vector2.Zero, Color.White);
+
+            foreach (var component in _components) 
+            {
+            component.Draw(gameTime, spriteBatch);
+            }
+
 
 
             spriteBatch.End();

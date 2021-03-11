@@ -17,6 +17,16 @@ namespace Eden.States
         private Texture2D pskin;
         private Texture2D blocktexture;
         private Camera camera;
+        private KeyboardState state;
+        private int x;
+        private int y;
+        private int startCol;
+        private int endCol;
+        private int startRow;
+        private int endRow;
+        private int offsetX;
+        private int offsetY;
+        Random rnd;
         Player _player;
      
         public Rectangle Rectangle
@@ -26,40 +36,51 @@ namespace Eden.States
                 return new Rectangle((int)Player.X, (int)Player.Y, blocktexture.Width, blocktexture.Height);
             }
         }
+
+        
+
         public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
         {
-
-            pskin = _content.Load<Texture2D>("Player/Player");
+            rnd = new Random();
+            _player = new Player(game, graphicsDevice, content);
             this.camera = new Camera(this._graphicsDevice);
             blocktexture = _content.Load<Texture2D>("Blocks/TILE");
-            _player = new Player();
             Screencenter = new Vector2(10, 10);
 
-
+            //populate world start
             for (int i = 0; i < 1000; i++)
             {
                 for (int j = 0; j < 1000; j++)
                 {
-                    tileGrid[i, j] = 0;
+                    tileGrid[i, j] = 1;
+                    
                 }
 
             }
+            //populate world end
+
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(this.camera);
-
-            for (int i = Math.Max(Mouse.GetState().X - 10, 0); i <= Math.Min(Mouse.GetState().X + 10, 1000); i++)
+            //draw tile start
+            for(int c = startCol; c <= endCol; c++)
             {
-               for (int j = Math.Max(Mouse.GetState().X - 10, 0); j <= Math.Min(Mouse.GetState().Y+10, 1000); j++) 
+                for (int r = startRow; r <= endRow; r++)
                 {
-                    spriteBatch.Draw(blocktexture, new Rectangle(i, j, blocktexture.Width, blocktexture.Height), new Rectangle(0, 0, blocktexture.Width, blocktexture.Height), Color.White);
+                    x = (c - startCol) * 17;
+                    y = (r - startRow) * 17;
+                    Vector2 pxy = new Vector2(x, y);
+                    spriteBatch.Draw(blocktexture, pxy, Color.White);
                 }
             }
-
-            spriteBatch.Draw(pskin, Screencenter, new Rectangle(0, 0, pskin.Width, pskin.Height), Color.White);
-
+            //draw tile end
+            
+            // player start
+            _player.Draw(gameTime,spriteBatch);
+            //player end
+    
             spriteBatch.End();
 
         }
@@ -71,11 +92,26 @@ namespace Eden.States
 
         public override void Update(GameTime gameTime)
         {
-            Screencenter = new Vector2(_player.playerPos.X, _player.playerPos.X);
+            state = Keyboard.GetState();
             
-            this.camera.Update(gameTime);
+            //render start calc
+            startCol = (int)Math.Floor(this.camera.Position.X / 17);
+            endCol = startCol + (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 17);
+            startRow = (int)Math.Floor(this.camera.Position.Y / 17);
+            endRow = startRow + (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 17);
+            offsetX = (int)(-this.camera.Position.X + startCol * 17);
+            offsetY = (int)(-this.camera.Position.Y + startRow * 17);
+            //render end calc
 
+            //player start
+            _player.Update(gameTime);
+            Screencenter = new Vector2(_player.playerPos.X, _player.playerPos.Y);
+            //player end
+
+            //camera start
+            this.camera.Update(gameTime);
             this.camera.Position = Screencenter;
+            //camera end
 
         }
     }
